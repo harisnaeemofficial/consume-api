@@ -1,0 +1,4 @@
+# nixpacks.toml
+
+[phases.install]
+cmds = ['yarn install']
