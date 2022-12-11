@@ -41,14 +41,12 @@ class WcoForever {
       let arrayRegOut = JSON.parse(arrayReg.exec(tempRegOut)[0]);
       let num = parseInt(tempRegOut.split(`.replace(\/\\D\/g,'')) -`)[1]);
 
-      await arrayRegOut.forEach(function (value) {
-        main += String.fromCharCode(
-          parseInt(atob(value).replace(/\D/g, "")) - num
-        );
+      await arrayRegOut.forEach((value) => {
+        const atob = Buffer.from(value, "base64").toString();
+        main += String.fromCharCode(parseInt(atob.replace(/\D/g, "")) - num);
       });
 
       main = main.split('src="')[1].split('" ')[0];
-      let wcoRef = main;
       option2.headers.referer = main;
 
       let domain;
@@ -70,8 +68,6 @@ class WcoForever {
           .join("&embed=anime");
 
         let { data: req4 } = await axios.get(main, option2);
-
-        req4 = JSON.parse(JSON.stringify(req4));
 
         if (req4.hd != "") {
           sources.push({
@@ -98,6 +94,32 @@ class WcoForever {
         }
       } catch (err) {
         console.error(err);
+      }
+
+      let { data: req3 } = await axios.get(main, option2);
+
+      if (req3.enc != "") {
+        sources.unshift({
+          url: req3.cdn + "/getvid?evid=" + req3.enc,
+          name: "SD",
+          type: "mp4",
+        });
+      }
+
+      if (req3.hd != "") {
+        sources.unshift({
+          url: req3.cdn + "/getvid?evid=" + req3.hd,
+          name: "HD",
+          type: "mp4",
+        });
+      }
+
+      if (req3.fhd != "") {
+        sources.unshift({
+          url: req3.cdn + "/getvid?evid=" + req3.fhd,
+          name: "FHD",
+          type: "mp4",
+        });
       }
 
       await browser.close();
