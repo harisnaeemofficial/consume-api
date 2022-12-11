@@ -69,9 +69,10 @@ class WcoForever {
 
         let { data: req4 } = await axios.get(main, option2);
 
+        const server = req4?.cdn;
         if (req4.hd != "") {
           sources.push({
-            url: req4.cdn + "/getvid?evid=" + req4.hd,
+            url: `${server}/getvid?evid=${req4.hd}`,
             name: "HD#2",
             type: "mp4",
           });
@@ -79,7 +80,7 @@ class WcoForever {
 
         if (req4.enc != "") {
           sources.push({
-            url: req4.cdn + "/getvid?evid=" + req4.enc,
+            url: `${server}/getvid?evid=${req4.enc}`,
             name: "SD#2",
             type: "mp4",
           });
@@ -87,7 +88,7 @@ class WcoForever {
 
         if (req4.fhd != "") {
           sources.push({
-            url: req4.cdn + "/getvid?evid=" + req4.fhd,
+            url: `${server}/getvid?evid=${req4.fhd}`,
             name: "FHD#2",
             type: "mp4",
           });
@@ -98,9 +99,10 @@ class WcoForever {
 
       let { data: req3 } = await axios.get(main, option2);
 
+      const server = req3?.cdn;
       if (req3.enc != "") {
         sources.unshift({
-          url: req3.cdn + "/getvid?evid=" + req3.enc,
+          url: `${server}/getvid?evid=${req3.enc}`,
           name: "SD",
           type: "mp4",
         });
@@ -108,7 +110,7 @@ class WcoForever {
 
       if (req3.hd != "") {
         sources.unshift({
-          url: req3.cdn + "/getvid?evid=" + req3.hd,
+          url: `${server}/getvid?evid=${req3.hd}`,
           name: "HD",
           type: "mp4",
         });
@@ -116,7 +118,7 @@ class WcoForever {
 
       if (req3.fhd != "") {
         sources.unshift({
-          url: req3.cdn + "/getvid?evid=" + req3.fhd,
+          url: `${server}/getvid?evid=${req3.fhd}`,
           name: "FHD",
           type: "mp4",
         });
