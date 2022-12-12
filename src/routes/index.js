@@ -21,7 +21,7 @@ import Asianload from "./Asian/asianload.js";
 import MangaDex from "./Manga/mangadex.js";
 import MangaHere from "./Manga/mangahere";
 import MangaKakalot from "./Manga/mangakakalot";
-import Mangapark from "./manga/mangapark";
+import Mangapark from "./manga/MangaPark";
 
 // MOVIES
 import FlixHQ from "./Movies/flixhq.js";
