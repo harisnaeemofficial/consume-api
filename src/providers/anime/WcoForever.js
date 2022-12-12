@@ -1,6 +1,7 @@
 import axios from "axios";
 import { load } from "cheerio";
 import puppeteer from "puppeteer-extra";
+import { USER_AGENT } from "../../utils";
 
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
@@ -18,6 +19,7 @@ class WcoForever {
     const sources = [];
     let option2 = {
       headers: {
+        "User-Agent": USER_AGENT,
         "x-requested-with": "XMLHttpRequest",
       },
     };
@@ -28,6 +30,10 @@ class WcoForever {
         executablePath: executablePath(),
       });
       const page = await browser.newPage();
+      await page.setExtraHTTPHeaders({
+        "User-Agent": option2.headers["User-Agent"],
+      });
+      console.log(await browser.userAgent());
       await page.goto(episodeId, { waitUntil: "networkidle2" });
 
       const htmlEpisodeId = await page.content();
@@ -42,8 +48,10 @@ class WcoForever {
       let num = parseInt(tempRegOut.split(`.replace(\/\\D\/g,'')) -`)[1]);
 
       await arrayRegOut.forEach((value) => {
-        const atob = Buffer.from(value, "base64").toString();
-        main += String.fromCharCode(parseInt(atob.replace(/\D/g, "")) - num);
+        // const atob = Buffer.from(value, "base64").toString();
+        main += String.fromCharCode(
+          parseInt(atob(value).replace(/\D/g, "")) - num
+        );
       });
 
       main = main.split('src="')[1].split('" ')[0];
@@ -56,9 +64,9 @@ class WcoForever {
         domain = "https://embed.watchanimesub.net";
       }
 
-      let { data: req2 } = await axios.get(main, option2);
+      let req2 = await axios.get(main, option2);
 
-      main = domain + req2.split('$.getJSON("')[1].split('"')[0];
+      main = domain + req2.data.split('$.getJSON("')[1].split('"')[0];
 
       try {
         let animeUrl = main
@@ -139,7 +147,7 @@ class WcoForever {
 (async () => {
   const wcoForever = new WcoForever();
   const source = await wcoForever.Source(
-    "https://www.wcoforever.net/xian-wang-de-richang-shenghuo-season-3-episode-12-english-subbed"
+    "https://www.wcoforever.net/my-hero-academia-season-6-episode-9-english-dubbed"
   );
   console.log(source);
 })();
