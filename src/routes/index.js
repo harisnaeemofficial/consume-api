@@ -21,6 +21,7 @@ import Asianload from "./Asian/asianload.js";
 import MangaDex from "./Manga/mangadex.js";
 import MangaHere from "./Manga/mangahere";
 import MangaKakalot from "./Manga/mangakakalot";
+import Mangapark from "./Manga/MangaPark";
 
 // MOVIES
 import FlixHQ from "./Movies/flixhq.js";
@@ -68,6 +69,7 @@ router.use("/asian/asianload", Asianload);
 router.use("/mangadex", MangaDex);
 router.use("/mangahere", MangaHere);
 router.use("/mangakakalot", MangaKakalot);
+router.use("/mangapark", Mangapark);
 
 // MOVIES
 router.use("/flixhq", FlixHQ);

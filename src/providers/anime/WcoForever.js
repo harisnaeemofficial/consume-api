@@ -159,9 +159,9 @@ class WcoForever {
         domain = "https://embed.watchanimesub.net";
       }
 
-      let { data: req2 } = await axios.get(main, option2);
+      let req2 = await axios.get(main, option2);
 
-      main = domain + req2.split('$.getJSON("')[1].split('"')[0];
+      main = domain + req2.data.split('$.getJSON("')[1].split('"')[0];
 
       try {
         let animeUrl = main

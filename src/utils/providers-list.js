@@ -25,6 +25,7 @@ export const PROVIDERS_LIST = {
   MANGA: [
     new MANGA.MangaDex(),
     new MANGA.MangaHere(),
+    new MANGA.Mangapark(),
     new MANGA.MangaKakalot(),
     new MANGA.Mangasee123(),
   ],
