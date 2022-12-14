@@ -1,6 +1,6 @@
 import axios from "axios";
 import { load } from "cheerio";
-import CFF from "../../utils/CF/src/CF";
+import CFF from "cfbypass";
 const CF = CFF.default;
 const cf = new CF(false);
 
@@ -11,7 +11,7 @@ class WcoForever {
   name = "WcoForever";
   baseUrl = "https://wcoforever.net";
 
-  search = async (query, page = 1) => {
+  Search = async (query, page = 1) => {
     const searchResults = {
       currentPage: page,
       hasNextPage: false,
@@ -19,22 +19,12 @@ class WcoForever {
     };
 
     try {
-      let formData = new FormData();
-      formData.append("catara", query);
-      formData.append("konuara", "series");
-
       const options = {
-        method: "post",
-        headers: {
-          ...formData.getHeaders(),
-          mode: "cors",
-          redirect: "follow",
-          credentials: "same-origin",
-          accept:
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-          "X-Requested-With": "XMLHttpRequest",
+        body: {
+          catara: query,
+          konuara: "series",
         },
-        body: formData,
+        method: "post",
       };
 
       const data = await cf.post(`${this.baseUrl}/search`, options);
@@ -42,24 +32,79 @@ class WcoForever {
       const html = await data.text();
       const $ = load(html);
 
-      const results = $("ul.items > li");
-      console.log($("ul.items ").html());
+      const results = $("ul.items li");
 
       results.each((i, el) => {
-        const title = $(el).find("h2").text();
-        const id = $(el).find("a").attr("href");
+        const title = $(el).find("div.recent-release-episodes > a").text();
+        const id = $(el).find("a").attr("href").split("/").pop();
+        const url = $(el).find("a").attr("href");
         const image = $(el).find("img").attr("src");
-        const type = $(el).find("span").text();
 
         searchResults.results.push({
           id,
           title,
           image,
-          type,
+          url: url,
         });
       });
 
       return searchResults;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  Info = async (id) => {
+    if (!id.includes(this.baseUrl)) id = `${this.baseUrl}/anime/${id}`;
+
+    const animeInfo = {
+      id: "",
+      title: "",
+      url: id,
+      genres: [],
+      totalEpisodes: 0,
+    };
+
+    try {
+      const data = await cf.get(id, {
+        method: "GET",
+      });
+
+      const html = await data.text();
+      const $ = load(html);
+
+      animeInfo.id = id.split("/").pop();
+      animeInfo.title = $(".h1-tag > a").text();
+      animeInfo.image = `https:${$("#sidebar_cat .img5").first().attr("src")}`;
+      animeInfo.description = $("#sidebar_cat p").text();
+
+      $("a.genre-buton:not(:contains('Report'))").each((i, el) => {
+        animeInfo.genres.push($(el).text());
+      });
+
+      const episodes = $("#sidebar_right3 a");
+      animeInfo.totalEpisodes = episodes.length;
+
+      animeInfo.episodes = [];
+      episodes.each((i, el) => {
+        const episodeId = $(el).attr("href").split("/").pop();
+        const episodeNumber = String(
+          $(el).attr("href").split("-episode-")[1]
+        ).split("-")[0];
+        const episodeSeason = String(
+          $(el).attr("href")?.split("-season-")[1]
+        )?.split("-")[0];
+        const episodeTitle = $(el).text().split(" ").slice(0, -1).join(" ");
+
+        animeInfo.episodes.push({
+          id: episodeId,
+          season: episodeSeason === "undefined" ? "1" : episodeSeason,
+          number: episodeNumber,
+          title: episodeTitle,
+        });
+      });
+
+      return animeInfo;
     } catch (error) {
       console.error(error);
     }
@@ -96,11 +141,12 @@ class WcoForever {
       let main = "";
 
       let arrayRegOut = JSON.parse(arrayReg.exec(tempRegOut)[0]);
-      let num = parseInt(tempRegOut.split(`.replace(\/\\D\/g,'')) -`)[1]);
+      let num = parseInt(tempRegOut.split(`.replace(/\\\\D/g,\\'\\')) - `)[1]);
 
       await arrayRegOut.forEach((value) => {
-        const atob = Buffer.from(value, "base64").toString();
-        main += String.fromCharCode(parseInt(atob.replace(/\D/g, "")) - num);
+        main += String.fromCharCode(
+          parseInt(atob(value).replace(/\D/g, "")) - num
+        );
       });
 
       main = main.split('src="')[1].split('" ')[0];
@@ -186,16 +232,15 @@ class WcoForever {
       console.log(error);
     }
   };
-
-  Servers = async (episodeId) => {
-    throw new Error("Method not implemented.");
-  };
 }
 
-(async () => {
-  const wcoForever = new WcoForever();
-  const source = await wcoForever.search("naruto");
-  console.log(source);
-})();
+// (async () => {
+//   const wcoForever = new WcoForever();
+//   const search = await wcoForever.Search("naruto");
+//   const info = await wcoForever.Info(search.results[0].id);
+
+//   const source = await wcoForever.Source(info.episodes[0].id);
+//   console.log(source);
+// })();
 
 export default WcoForever;

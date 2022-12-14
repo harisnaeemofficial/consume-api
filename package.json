@@ -16,6 +16,7 @@
     "axios": "^0.27.2",
     "axios-cache-adapter": "^2.7.3",
     "cache-manager": "^5.1.1",
+    "cfbypass": "^0.0.2",
     "cheerio": "^1.0.0-rc.12",
     "cloudflare-scraper": "^1.0.8",
     "cors": "^2.8.5",
