@@ -18,6 +18,7 @@
     "cache-manager": "^5.1.1",
     "cheerio": "^1.0.0-rc.12",
     "cloudflare-scraper": "^1.0.8",
+    "cloudscraper-version.two": "^0.0.17",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",

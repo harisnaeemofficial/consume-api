@@ -4,6 +4,8 @@ import CFF from "../../utils/CF/src/CF";
 const CF = CFF.default;
 const cf = new CF(false);
 
+import cloudscraper from "cloudscraper-version.two";
+
 import { USER_AGENT } from "../../utils";
 import FormData from "form-data";
 
