@@ -2136,6 +2136,7 @@ class Anilist {
 
         return mangaInfo;
       } catch (error) {
+        console.log(error);
         throw Error(error.message);
       }
     };
