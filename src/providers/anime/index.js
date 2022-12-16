@@ -12,6 +12,7 @@ import Crunchyroll from "./crunchyroll";
 import Bilibili from "./bilibili";
 import NyaaSi from "./nyaasi/index.js";
 import Tenshi from "./tenshi/tenshi";
+import WcoForever from "./WcoForever";
 
 export default {
   GogoAnime,

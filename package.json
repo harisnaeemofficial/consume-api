@@ -18,6 +18,11 @@
     "cache-manager": "^5.1.1",
     "cfbypass": "^0.0.3",
     "cheerio": "^1.0.0-rc.12",
+<<<<<<< HEAD
+=======
+    "cloudflare-scraper": "^1.0.8",
+    "cloudscraper-version.two": "^0.0.17",
+>>>>>>> 4c8513ab46d171a07e8ef57a09a776b0d3b19e05
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
